@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TP 11</title>
+  <style>
+    :root{--bg:#f6f8fa;--card:#fff;--text:#0b1220;--muted:#525f7f}
+    .dark{--bg:#0b1220;--card:#071022;--text:#e6eef8;--muted:#9fb0d3}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:var(--bg); color:var(--text); margin:0; padding:24px}
+    .container{max-width:1000px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+    h1{margin:0 0 8px;font-size:22px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06);margin:14px 0}
+    pre{background:#0f1724;color:#dfefff;padding:12px;border-radius:8px;overflow:auto}
+    code{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace}
+    .flex{display:flex;gap:8px;align-items:center}
+    button{padding:8px 12px;border-radius:8px;border:0;background:#1f6feb;color:white;cursor:pointer}
+    button.alt{background:#2d9c6b}
+    .output{white-space:pre-wrap;font-family:inherit;background:rgba(0,0,0,0.04);padding:10px;border-radius:6px;margin-top:8px;color:var(--text)}
+    nav a{color:var(--text);text-decoration:none;padding:6px 10px;border-radius:6px}
+    nav a:hover{background:rgba(0,0,0,0.04)}
+    footer{color:var(--muted);font-size:13px;margin-top:18px}
+  </style>
+</head>
+<body>
+  <div class="container" id="page">
+    <header>
+      <div>
+        <h1>TP 11</h1>
+      </div>
+
+    </header>
+
+    <!-- FASE 1 -->
+    <section id="fase1" class="card">
+      <h2>Fase 1 — Teoría: Coerción, tipos, variables, operadores</h2>
+
+      <h3>Ejercicio: ¿Qué devuelve cada expresión?</h3>
+      <div class="output" id="fase1-results"></div>
+
+      <h3>Convertí los valores para que sumen correctamente</h3>
+      <p>Ejemplos de cómo convertir:</p>
+      <pre><code>
+// "15" y 30
+Number("15") + 30        // 45
++"15" + 30               // 45 (operador + unario convierte a number)
+parseInt("15") + 30     // 45
+
+// "true" y "false"
+// Si hablamos de <strong>booleans</strong>:
+Number(true)  // 1
+Number(false) // 0
+
+// Si recibimos las palabras "true" y "false" como strings:
+Number("true")   // NaN  (no son valores numéricos)
+// Para tratarlas correctamente:
+("true" === "true") ? 1 : 0  // 1
+("false" === "true") ? 1 : 0 // 0
+      </code></pre>
+      <p class="muted">Nota: usar <code>+variable</code> es la forma más corta de convertir una string numérica a número.</p>
+
+      <h3>¿Qué hay guardado en la variable <code>a</code> en este código?</h3>
+      <pre><code>a = console.log("jorge")</code></pre>
+      <p>Respuesta: <strong>a</strong> queda con el valor <code>undefined</code>, porque <code>console.log</code> imprime en consola pero no devuelve nada (su valor de retorno es <code>undefined</code>).</p>
+
+      <h3>Tipos de operadores en JavaScript</h3>
+      <ul>
+        <li><strong>Aritméticos:</strong> +, -, *, /, %, ** (suma, resta, multiplicación, división, módulo, potencia). Operan sobre números; <code>+</code> también concatena si uno de los operandos es string.</li>
+        <li><strong>Lógicos:</strong> && (AND), || (OR), ! (NOT). Devuelven booleanos después de evaluar expresiones, y usan cortocircuito.</li>
+        <li><strong>Relacionales / Comparación:</strong> &lt;, &gt;, &lt;=, &gt;=, ==, ===, !=, !==. <code>==</code> hace coerción, <code>===</code> es estricto (sin coerción).</li>
+        <li><strong>Asignación:</strong> =, +=, -=, *=, /=, %=, etc. Asignan valores a variables y pueden combinarse con operaciones.</li>
+      </ul>
+
+      <h3>¿Qué hace el siguiente código?</h3>
+      <pre><code>while (true) {
+    console.log("el resultado es:");
+}
+console.log(3);</code></pre>
+      <p>Explicación: El <code>while(true)</code> crea un bucle infinito porque la condición siempre es true. Por lo tanto, <code>console.log(3)</code> <strong>nunca</strong> se ejecuta. En la práctica esto bloquearía el hilo principal y congelaría la página.</p>
+    </section>
+
+    <!-- FASE 2 -->
+    <section id="fase2" class="card">
+      <h2>Fase 2 — Estructuras de control (if / else / else if)</h2>
+
+      <h3>1) Función semáforo</h3>
+      <pre><code>function semaforo(color){
+  color = String(color).toLowerCase();
+  if(color === 'verde') return 'Avanzar';
+  else if(color === 'amarillo') return 'Precaución';
+  else if(color === 'rojo') return 'Detenerse';
+  else return 'Color no reconocido';
+}</code></pre>
+      <p>Prueba y resultado en pantalla:</p>
+      <div id="semaforo-output" class="output"></div>
+
+      <h3>2) Detectar temperatura</h3>
+      <pre><code>function detectarTemperatura(t){
+  if(t < 0) return 'Frío extremo';
+  else if(t <= 15) return 'Frío';        // 0 a 15
+  else if(t <= 30) return 'Agradable';   // 16 a 30
+  else return 'Calor';                   // &gt; 30
+}</code></pre>
+      <div id="temp-output" class="output"></div>
+
+      <h3>3) Reescribir código anidado (más prolijo)</h3>
+      <p>Versión original (anidada):</p>
+      <pre><code>if (edad >= 18) {
+    if (edad < 65) {
+        if (edad % 2 === 0) {
+            console.log("Sos un adulto par")
+        }
+    }
+} else {
+    if (edad < 18) {
+        if (edad % 2 !== 0) {
+            console.log("Sos un menor impar")
+        }
+    }
+}</code></pre>
+      <p>Versión mejorada:</p>
+      <pre><code>if (typeof edad === 'number'){
+  if (edad >= 18 && edad < 65 && edad % 2 === 0){
+    console.log('Sos un adulto par');
+  } else if (edad < 18 && edad % 2 !== 0){
+    console.log('Sos un menor impar');
+  }
+}</code></pre>
+
+      <h3>4) Saludo personalizado según la hora</h3>
+      <pre><code>function saludoPorHora(d = new Date()){
+  const hora = d.getHours();
+  if(hora >= 6 && hora <= 12) return 'Buen día';
+  else if(hora >= 13 && hora <= 19) return 'Buenas tardes';
+  else return 'Buenas noches'; // incluye 20-23 y 0-5
+}</code></pre>
+      <div id="saludo-output" class="output"></div>
+    </section>
+
+    <!-- FASE 3 -->
+    <section id="fase3" class="card">
+      <h2>Fase 3 — While, contadores y acumuladores</h2>
+
+      <h3>1) Generar 10 números aleatorios (1-100) y mostrar promedio</h3>
+      <div id="aleatorios-output" class="output"></div>
+
+      <h3>2) Contador de frases (prompt hasta escribir "FIN")</h3>
+      <p>Al presionar el botón se abrirán prompts repetidos hasta que escribas <code>FIN</code>.</p>
+      <div class="flex"><button id="start-phrases">Iniciar contador de frases</button></div>
+      <div id="phrases-output" class="output"></div>
+
+      <h3>3) "Cargador de energía" (sumar aleatorio 1-10 hasta &gt;= 100)</h3>
+      <div class="flex"><button id="start-charger">Cargar energía</button></div>
+      <div id="charger-output" class="output"></div>
+
+      <h3>4) Loop anidado: matriz 3x3 mostrando fila/columna</h3>
+      <div id="matrix-output" class="output"></div>
+    </section>
+
+    <!-- FASE 4 -->
+    <section id="fase4" class="card">
+      <h2>Fase 4 — For e iteración de arrays</h2>
+
+      <h3>1) Recorrer temperaturas y contar > 25°C</h3>
+      <div id="for-temp-output" class="output"></div>
+
+      <h3>2) Mostrar días y temperaturas</h3>
+      <div id="dias-temp-output" class="output"></div>
+
+      <h3>3) Sumar tres arrays usando loops anidados</h3>
+      <div id="sum-arrays-output" class="output"></div>
+    </section>
+
+    <!-- FASE 5 -->
+    <section id="fase5" class="card">
+      <h2>Fase 5 — Funciones</h2>
+
+      <h3>1) °C ↔ °F</h3>
+      <pre><code>function cToF(c){ return (c * 9/5) + 32; }
+function fToC(f){ return (f - 32) * 5/9; }</code></pre>
+      <div id="cf-output" class="output"></div>
+
+      <h3>2) Promedio de un array</h3>
+      <pre><code>function promedio(arr){
+  if(!arr.length) return 0;
+  let s = 0; for(let v of arr) s += v; return s / arr.length;
+}</code></pre>
+      <div id="avg-output" class="output"></div>
+
+      <h3>3) buscarValor(arr, valor)</h3>
+      <pre><code>function buscarValor(arr, valor){
+  for(let v of arr) if(v === valor) return true; return false;
+}</code></pre>
+      <div id="buscar-output" class="output"></div>
+
+      <h3>4) Nombre y edad (mensaje)</h3>
+      <pre><code>function saludarNombreEdad(nombre, edad){
+  return `Hola, ${nombre}. Tenés ${edad} años.`;
+}</code></pre>
+      <div id="saludo-nombre-output" class="output"></div>
+
+      <h3>5) mostrarNombres con apodos (rest)</h3>
+      <pre><code>function mostrarNombres(nombrePrincipal, ...apodos){
+  return `Nombre: ${nombrePrincipal} - Apodos: ${apodos.join(', ')}`;
+}
+// Ejemplo: mostrarNombres("Martina","La Colo","Tin","Marty")</code></pre>
+      <div id="nombres-output" class="output"></div>
+    </section>
+  </div>
+
+  <script>
+    // --- Dark mode toggle ---
+    const body = document.body;
+    const toggle = document.getElementById('toggleDark');
+    toggle.addEventListener('click', ()=> body.classList.toggle('dark'));
+
+    // --- Download link (allows user to save the HTML currently open) ---
+    (function(){
+      // Create a blob of the current document's HTML so user can download it.
+      const dl = document.getElementById('downloadLink');
+      const htmlContent = '<!doctype html>\n' + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      dl.href = url;
+      dl.download = 'TP11_JavaScript.html';
+    })();
+
+    // ------------------ FASE 1: resultados de coerción ------------------
+    (function(){
+      const out = document.getElementById('fase1-results');
+      const results = [];
+
+      // 1) "5" + 3 -> "53" (concatenación)
+      results.push({expr: '"5" + 3', value: "5" + 3, explain: 'Como uno de los operandos es string, + concatena. El 3 se convierte implícitamente a "3".'});
+      // 2) "5" - 3 -> 2 (resta numérica)
+      results.push({expr: '"5" - 3', value: "5" - 3, explain: 'El operador - fuerza conversión a número: "5" → 5, por eso 5 - 3 = 2.'});
+      // 3) true + 1 -> 2
+      results.push({expr: 'true + 1', value: true + 1, explain: 'Booleanos se convierten a 1 (true) o 0 (false). true→1 → 1 + 1 = 2.'});
+      // 4) null + 5 -> 5
+      results.push({expr: 'null + 5', value: null + 5, explain: 'null se convierte a 0 en operaciones aritméticas → 0 + 5 = 5.'});
+      // 5) undefined + 1 -> NaN
+      const v = undefined + 1;
+      results.push({expr: 'undefined + 1', value: String(v), explain: 'undefined no se convierte a número válido; el resultado es NaN (Not a Number).'});
+
+      let text = '';
+      for(const r of results){
+        text += `${r.expr}  →  ${r.value}\nExplicación: ${r.explain}\n\n`;
+      }
+      out.textContent = text;
+    })();
+
+    // ------------------ FASE 2: semaforo y temperatura ------------------
+    function semaforo(color){
+      color = String(color).toLowerCase();
+      if(color === 'verde') return 'Avanzar';
+      else if(color === 'amarillo') return 'Precaución';
+      else if(color === 'rojo') return 'Detenerse';
+      else return 'Color no reconocido';
+    }
+    document.getElementById('semaforo-output').textContent = `semaforo('verde') => ${semaforo('verde')}\nsemaforo('AZUL') => ${semaforo('AZUL')}`;
+
+    function detectarTemperatura(t){
+      if(t < 0) return 'Frío extremo';
+      else if(t <= 15) return 'Frío';
+      else if(t <= 30) return 'Agradable';
+      else return 'Calor';
+    }
+    document.getElementById('temp-output').textContent = `-10 → ${detectarTemperatura(-10)}\n10 → ${detectarTemperatura(10)}\n22 → ${detectarTemperatura(22)}\n35 → ${detectarTemperatura(35)}`;
+
+    function saludoPorHora(d = new Date()){
+      const hora = d.getHours();
+      if(hora >= 6 && hora <= 12) return 'Buen día';
+      else if(hora >= 13 && hora <= 19) return 'Buenas tardes';
+      else return 'Buenas noches';
+    }
+    document.getElementById('saludo-output').textContent = `Hora actual: ${new Date().getHours()} → ${saludoPorHora()}`;
+
+    // ------------------ FASE 3: while y acumuladores ------------------
+    // 1) Generar 10 aleatorios 1..100
+    (function(){
+      const nums = [];
+      let i = 0;
+      while(i < 10){
+        const r = Math.floor(Math.random()*100) + 1;
+        nums.push(r);
+        i++;
+      }
+      const suma = nums.reduce((a,b)=>a+b,0);
+      const prom = (suma / nums.length).toFixed(2);
+      document.getElementById('aleatorios-output').textContent = `Números generados: ${nums.join(', ')}\nPromedio: ${prom}`;
+    })();
+
+    // 2) Contador de frases (usa prompt)
+    document.getElementById('start-phrases').addEventListener('click', ()=>{
+      let count = 0;
+      while(true){
+        const entrada = prompt('Ingrese una frase (escriba FIN para terminar):');
+        if(entrada === null) { // usuario canceló
+          document.getElementById('phrases-output').textContent = 'Proceso cancelado por el usuario.'; break;
+        }
+        if(entrada.trim().toUpperCase() === 'FIN'){
+          document.getElementById('phrases-output').textContent = `Se ingresaron ${count} frases antes de escribir FIN.`; break;
+        }
+        count++;
+      }
+    });
+
+    // 3) Cargador de energía
+    document.getElementById('start-charger').addEventListener('click', ()=>{
+      let energia = 0; let ciclos = 0;
+      while(energia < 100){
+        const suma = Math.floor(Math.random()*10) + 1; // 1..10
+        energia += suma; ciclos++;
+        if(ciclos > 1000) break; // precaución (nunca debería pasar)
+      }
+      document.getElementById('charger-output').textContent = `Valor final de energía: ${energia} \nCantidad de ciclos: ${ciclos}`;
+    });
+
+    // 4) Matriz 3x3 con while anidado
+    (function(){
+      let out = '';
+      let fila = 0;
+      while(fila < 3){
+        let col = 0;
+        while(col < 3){
+          out += `Fila ${fila} - Columna ${col}\\n`;
+          col++;
+        }
+        fila++;
+      }
+      document.getElementById('matrix-output').textContent = out;
+    })();
+
+    // ------------------ FASE 4: for y arrays ------------------
+    (function(){
+      const temperaturas = [25,30,10,3,9,20,22,15,18,20,22];
+      let texto = '';
+      let contador = 0;
+      for(let i=0;i<temperaturas.length;i++){
+        texto += `Idx ${i}: ${temperaturas[i]}°C\\n`;
+        if(temperaturas[i] > 25) contador++;
+      }
+      texto += `\nValores > 25°C: ${contador}`;
+      document.getElementById('for-temp-output').textContent = texto;
+
+      // dias y temperaturas
+      const dias = ["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"]; 
+      const temps = [22,25,20,18,30,28,26];
+      let out2 = '';
+      for(let i=0;i<dias.length;i++) out2 += `${dias[i]}: ${temps[i]}°C\\n`;
+      document.getElementById('dias-temp-output').textContent = out2;
+
+      // sumar 3 arrays con loops anidados
+      const array1 = [56,4,3];
+      const array2 = [4,33,64];
+      const array3 = [7,-23,9];
+      const listas = [array1,array2,array3];
+      let total = 0;
+      for(let i=0;i<listas.length;i++){
+        for(let j=0;j<listas[i].length;j++){
+          total += listas[i][j];
+        }
+      }
+      document.getElementById('sum-arrays-output').textContent = `Suma total de los 3 arrays: ${total}`;
+    })();
+
+    // ------------------ FASE 5: funciones ------------------
+    (function(){
+      function cToF(c){ return (c * 9/5) + 32; }
+      function fToC(f){ return (f - 32) * 5/9; }
+      document.getElementById('cf-output').textContent = `0°C → ${cToF(0)}°F\n100°C → ${cToF(100)}°F\n32°F → ${fToC(32)}°C`;
+
+      function promedio(arr){ if(!arr.length) return 0; let s=0; for(let v of arr) s+=v; return s/arr.length; }
+      document.getElementById('avg-output').textContent = `Promedio de [2,4,6,8] → ${promedio([2,4,6,8])}`;
+
+      function buscarValor(arr, valor){ for(let v of arr) if(v === valor) return true; return false; }
+      document.getElementById('buscar-output').textContent = `buscarValor([1,2,3], 2) → ${buscarValor([1,2,3],2)} \nbuscarValor([1,2,3], 5) → ${buscarValor([1,2,3],5)}`;
+
+      function saludarNombreEdad(nombre, edad){ return `Hola, ${nombre}. Tenés ${edad} años.`; }
+      document.getElementById('saludo-nombre-output').textContent = saludarNombreEdad('Juan',25);
+
+      function mostrarNombres(nombrePrincipal, ...apodos){ return `Nombre: ${nombrePrincipal} - Apodos: ${apodos.join(', ')}`; }
+      document.getElementById('nombres-output').textContent = mostrarNombres('Martina','Beto','Tin','Marty');
+    })();
+
+  </script>
+</body>
+</html>
